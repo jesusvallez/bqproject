@@ -1,0 +1,40 @@
+$icon-size: 22px
+$navbar-size: 70px
+
+.icon-bitbloq
+  object-fit: contain
+  display: block
+  margin: auto
+  background-color: #fff
+  -webkit-mask: url('/assets/img/icon-bitbloq.svg') no-repeat center
+  mask: url('/assets/img/icon-bitbloq.svg') no-repeat center
+
+.icon
+  width: $icon-size
+  height: $icon-size
+  float: left
+  margin-right: 10px
+
+.navbar
+  height: $navbar-size
+  background-color: #373b44
+  padding-left: 0px
+
+  .Rectngulo-1
+    fill: #fff
+    background-color: #82ad3a
+    width: $navbar-size
+    height: $navbar-size
+    padding: 24px
+
+  li.nav-item
+    padding-left: 30px
+
+    a.nav-link
+      display: inline-block
+
+      .icon
+        opacity: 0.5
+
+      .icon.active
+        opacity: 1

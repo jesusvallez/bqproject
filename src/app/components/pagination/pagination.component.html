@@ -1,0 +1,15 @@
+<nav aria-label="navigation">
+  <ul class="pagination justify-content-center">
+    <li class="page-item prev" [ngClass]="{'disabled': isFirstPage()}">
+      <a class="page-link" [href]="goToPrevPage()">Anterior</a>
+    </li>
+
+    <li class="page-item" *ngFor="let value of getCountProjects()">
+      <a class="page-link" [href]="setPage(value)">{{ value }}</a>
+    </li>
+
+    <li class="page-item next" [ngClass]="{'disabled': isLastPage()}">
+      <a class="page-link" [href]="goToNextPage()">Siguiente</a>
+    </li>
+  </ul>
+</nav>

@@ -1,0 +1,65 @@
+<div class="container">
+
+  <div class="row">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 mt-4">
+
+      <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label id="grid" class="btn list-type" [ngClass]="{'active': getView()}" (click)="setGrid()">
+          <input id="grid" type="radio" name="options" autocomplete="off"><i class="fas fa-th"></i>
+        </label>
+        <label id="list" class="btn list-type" [ngClass]="{'active': !getView()}" (click)="setList()">
+          <input id="list" type="radio" name="options" autocomplete="off"><i class="fas fa-list"></i>
+        </label>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="row" *ngIf="getView()">
+    <div class="col-12 col-sm-6 col-md-4 col-lg-4 mt-4" *ngFor="let project of projects">
+
+      <div class="card card-inverse card-info">
+        <div class="card-img-top">
+          <img [src]="getImageFromURL(project)">
+        </div>
+
+        <div class="card-block">
+          <h2 class="card-title">{{ project.name }}</h2>
+          <div class="card-text">
+            <div class="left card-username">de {{ project.creator.username }}</div>
+            <div class="right card-social">
+              <div class="like">5</div>
+              <div class="add">6</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="row" *ngIf="!getView()">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 mt-4" *ngFor="let project of projects">
+
+      <div class="card card-inverse card-info list">
+        <div class="card-img-top">
+          <img [src]="getImageFromURL(project)">
+        </div>
+
+        <div class="card-block">
+          <h2 class="card-title">{{ project.name }}</h2>
+          <div class="card-text">
+            <div class="left card-username">de {{ project.creator.username }}</div>
+            <div class="right card-social">
+              <div class="like">5</div>
+              <div class="add">6</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
