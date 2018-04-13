@@ -62,18 +62,19 @@ export class PaginationComponent implements OnInit {
   }
 
   getCountProjects () {
-    let numToPush = 1
-    let setRange = new Set()
-    let arrayRange = []
-    let currentPage = this.page
-    let nrOfPages = Math.ceil(this.count / 20) - 1
+    let delta = 1, numToPush = 7
+    let arrayRange = [], arrayRangeFilled = []
 
-    if (nrOfPages <= 1) {
+    let setRange = new Set()
+    let currentPage = this.page
+    let nOfPages = Math.trunc(this.count / 20)
+
+    if (nOfPages <= 1) {
       arrayRange.push(1)
       return arrayRange
     }
 
-    for (let i = 1; i <= numToPush; i++) {
+    for (let i = 1; i <= delta; i++) {
       let minPush = currentPage - i
       let maxPush = currentPage + i
 
@@ -81,18 +82,36 @@ export class PaginationComponent implements OnInit {
         setRange.add(minPush)
       }
 
-      if (maxPush < nrOfPages) {
+      if (maxPush < nOfPages) {
         setRange.add(maxPush)
       }
     }
 
     setRange.add(1);
-    setRange.add(nrOfPages)
+    setRange.add(nOfPages)
     setRange.add(currentPage)
 
     arrayRange = Array.from(setRange);
     arrayRange.sort((a, b) => a - b)
 
-    return arrayRange
+    if (nOfPages < numToPush) {
+      numToPush = nOfPages
+    }
+
+    for (let index = 0; index < arrayRange.length - 1; index++) {
+      const element = arrayRange[index];
+      const nextElement = arrayRange[index + 1];
+      arrayRangeFilled.push(element)
+
+      if (nextElement - element === 2) {
+        arrayRangeFilled.push(element + 1);
+      } else if (nextElement - element !== 1) {
+        arrayRangeFilled.push(null);
+      }
+    }
+
+    arrayRangeFilled.push(nOfPages)
+
+    return arrayRangeFilled
   }
 }
