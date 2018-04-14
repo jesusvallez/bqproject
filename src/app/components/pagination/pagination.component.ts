@@ -33,7 +33,7 @@ export class PaginationComponent implements OnInit {
   }
 
   isFirstPage (value:number):boolean {
-    let fistPage = false
+    let fistPage:boolean = false
 
     if(this.page === 1)
       fistPage = true
@@ -62,29 +62,35 @@ export class PaginationComponent implements OnInit {
   }
 
   getCountProjects () {
-    let delta = 1, numToPush = 7
-    let arrayRange = [], arrayRangeFilled = []
+    let currentPage:number = this.page
+    let nOfPages:number = Math.trunc(this.count / 20)
 
-    let setRange = new Set()
-    let currentPage = this.page
-    let nOfPages = Math.trunc(this.count / 20)
+    let setRange:Set<number> = new Set()
+    let arrayRange:Array<number> = [], arrayRangeFilled:Array<number> = []
 
     if (nOfPages <= 1) {
-      arrayRange.push(1)
-      return arrayRange
+      arrayRangeFilled = [1]
+    } else {
+      let numToPush:number = 7
+      arrayRange = this.generateInitPagination (setRange, currentPage, nOfPages)
+      arrayRangeFilled = this.fillWithDots (arrayRange, nOfPages)
+      arrayRangeFilled = this.fillWithNumbers(arrayRangeFilled, arrayRange, nOfPages, numToPush)
     }
 
-    for (let i = 1; i <= delta; i++) {
-      let minPush = currentPage - i
-      let maxPush = currentPage + i
+    return arrayRangeFilled
+  }
 
-      if (1 < minPush) {
-        setRange.add(minPush)
-      }
+  generateInitPagination (setRange:Set<number>, currentPage:number, nOfPages:number):Array<number> {
+    let arrayRange:Array<number> = []
+    let minPush:number = currentPage - 1
+    let maxPush:number = currentPage + 1
 
-      if (maxPush < nOfPages) {
-        setRange.add(maxPush)
-      }
+    if (1 < minPush) {
+      setRange.add(minPush)
+    }
+
+    if (maxPush < nOfPages) {
+      setRange.add(maxPush)
     }
 
     setRange.add(1);
@@ -94,10 +100,11 @@ export class PaginationComponent implements OnInit {
     arrayRange = Array.from(setRange);
     arrayRange.sort((a, b) => a - b)
 
-    if (nOfPages < numToPush) {
-      numToPush = nOfPages
-    }
+    return arrayRange
+  }
 
+  fillWithDots (arrayRange:Array<number>, nOfPages:number):Array<number> {
+    let arrayRangeFilled:Array<number> = []
     for (let index = 0; index < arrayRange.length - 1; index++) {
       const element = arrayRange[index];
       const nextElement = arrayRange[index + 1];
@@ -111,7 +118,36 @@ export class PaginationComponent implements OnInit {
     }
 
     arrayRangeFilled.push(nOfPages)
+    return arrayRangeFilled
+  }
+
+  fillWithNumbers (arrayRangeFilled:Array<number>, arrayRange:Array<number>, nOfPages:number, numToPush:number):Array<number> {
+    if (nOfPages < numToPush) {
+      numToPush = nOfPages
+    }
+
+    let numToFill:number = numToPush - arrayRangeFilled.length
+    arrayRange = arrayRangeFilled.slice()
+
+    if (arrayRange[1] !== null && arrayRange[arrayRange.length - 2] === null) {
+      for (let index = 1; index <= numToFill; index++) {
+        arrayRangeFilled.splice(arrayRange.length - 3 + index, 0, arrayRange[arrayRange.length - 3] + index);
+      }
+
+      if (arrayRangeFilled[arrayRangeFilled.length - 3] + 2 === arrayRangeFilled[arrayRangeFilled.length - 1]) {
+        arrayRangeFilled[arrayRangeFilled.length - 2] = arrayRangeFilled[arrayRangeFilled.length - 1] - 1;
+      }
+    } else if (arrayRange[1] === null && arrayRange[arrayRange.length - 2] !== null) {
+      for (let index = 1; index <= numToFill; index++) {
+        arrayRangeFilled.splice(2, 0, arrayRange[2] - index);
+      }
+
+      if (arrayRangeFilled[0] + 2 === arrayRangeFilled[2]) {
+        arrayRangeFilled[1] = arrayRangeFilled[0] + 1;
+      }
+    }
 
     return arrayRangeFilled
   }
+
 }
